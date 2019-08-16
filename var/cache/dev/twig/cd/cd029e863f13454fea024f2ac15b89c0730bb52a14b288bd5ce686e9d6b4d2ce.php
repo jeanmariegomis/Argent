@@ -71,6 +71,6 @@ class __TwigTemplate_bd8615f25ac34c36258ae5d2dca087d78b3e0d5a456af487f5286980e04
     <?php if (strlen(\$value) > 0): ?> value=\"<?php echo \$view->escape(\$value) ?>\"<?php endif ?>
     <?php if (\$checked): ?> checked=\"checked\"<?php endif ?>
 />
-", "@Framework/Form/checkbox_widget.html.php", "/home/jean/argent/vendor/symfony/framework-bundle/Resources/views/Form/checkbox_widget.html.php");
+", "@Framework/Form/checkbox_widget.html.php", "/home/jean/Argent/vendor/symfony/framework-bundle/Resources/views/Form/checkbox_widget.html.php");
     }
 }

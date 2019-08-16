@@ -173,6 +173,6 @@ class __TwigTemplate_930a214d75c62ae592ff5063667642defed45d534c9b09f110d56bea312
         {% block javascripts %}{% endblock %}
     </body>
 </html>
-", "base.html.twig", "/home/jean/argent/templates/base.html.twig");
+", "base.html.twig", "/home/jean/Argent/templates/base.html.twig");
     }
 }

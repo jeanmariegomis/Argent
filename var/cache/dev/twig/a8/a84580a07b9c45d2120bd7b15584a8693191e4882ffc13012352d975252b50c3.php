@@ -1828,6 +1828,6 @@ class __TwigTemplate_12cd9415ff07171807741b79e44f94efac10a7d0576b2050bead046de4e
         </tbody>
     </table>
 {% endmacro %}
-", "@Doctrine/Collector/db.html.twig", "/home/jean/argent/vendor/doctrine/doctrine-bundle/Resources/views/Collector/db.html.twig");
+", "@Doctrine/Collector/db.html.twig", "/home/jean/Argent/vendor/doctrine/doctrine-bundle/Resources/views/Collector/db.html.twig");
     }
 }

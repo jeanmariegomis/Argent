@@ -135,6 +135,6 @@ class __TwigTemplate_aabaca89369f17482d21aa26b0f5a7f3a4d8bc9dff5e499ef75239d4c8e
         {% endfor %}
     </tbody>
 </table>
-", "@WebProfiler/Profiler/bag.html.twig", "/home/jean/argent/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/bag.html.twig");
+", "@WebProfiler/Profiler/bag.html.twig", "/home/jean/Argent/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/bag.html.twig");
     }
 }

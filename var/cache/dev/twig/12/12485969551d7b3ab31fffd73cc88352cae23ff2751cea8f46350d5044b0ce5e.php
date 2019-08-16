@@ -642,6 +642,6 @@ class __TwigTemplate_71ef2d59a3b381c09ee00acae7bb04b3f62942946e842b553ce4d99e081
         }());
     </script>
 {% endblock %}
-", "@WebProfiler/Profiler/layout.html.twig", "/home/jean/argent/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/layout.html.twig");
+", "@WebProfiler/Profiler/layout.html.twig", "/home/jean/Argent/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/layout.html.twig");
     }
 }

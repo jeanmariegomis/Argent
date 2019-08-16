@@ -171,6 +171,6 @@ class __TwigTemplate_85d4010795d8ba7eddabd07c42e38db2a413b099a479a0bc1e35c4162f4
         {%- endfor -%}
     </pre>
 {% endif %}
-", "@Doctrine/Collector/explain.html.twig", "/home/jean/argent/vendor/doctrine/doctrine-bundle/Resources/views/Collector/explain.html.twig");
+", "@Doctrine/Collector/explain.html.twig", "/home/jean/Argent/vendor/doctrine/doctrine-bundle/Resources/views/Collector/explain.html.twig");
     }
 }

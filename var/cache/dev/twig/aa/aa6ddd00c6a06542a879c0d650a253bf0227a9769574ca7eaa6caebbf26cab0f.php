@@ -79,6 +79,6 @@ class __TwigTemplate_8a8a1191444454631bba34aac02811d7bdd33e14aa9e7f4025e2595788b
 {{ status_code }} {{ status_text }}
 
 */
-", "@Twig/Exception/error.css.twig", "/home/jean/argent/vendor/symfony/twig-bundle/Resources/views/Exception/error.css.twig");
+", "@Twig/Exception/error.css.twig", "/home/jean/Argent/vendor/symfony/twig-bundle/Resources/views/Exception/error.css.twig");
     }
 }

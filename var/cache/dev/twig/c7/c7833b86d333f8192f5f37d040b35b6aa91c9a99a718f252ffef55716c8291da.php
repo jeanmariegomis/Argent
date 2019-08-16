@@ -75,6 +75,6 @@ class __TwigTemplate_ebed21b82067fa0d9b03dd03154c423f30d3dcb243853805e9a60f2d597
         return new Source("/*
 {{ include('@Twig/Exception/exception.txt.twig', { exception: exception }) }}
 */
-", "@Twig/Exception/exception.css.twig", "/home/jean/argent/vendor/symfony/twig-bundle/Resources/views/Exception/exception.css.twig");
+", "@Twig/Exception/exception.css.twig", "/home/jean/Argent/vendor/symfony/twig-bundle/Resources/views/Exception/exception.css.twig");
     }
 }

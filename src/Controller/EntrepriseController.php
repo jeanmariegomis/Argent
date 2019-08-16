@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
-
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Security\Core\User\DatetimeInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -43,7 +43,9 @@ class EntrepriseController extends AbstractController
         $random=random_int(100000,999999);
         $Utilisateur= new Utilisateur();
         $form = $this->createForm(UtilisateurType::class, $Utilisateur);// liaison de notre formulaire avec l'objet de type depot
-        $data=json_decode($request->getContent(),true); //conversion de notre element de la requette
+        $data=$request->request->all(); //conversion de notre element de la requette
+        $file=$request->files->all()['imageFile'];
+
         $form->submit($data);
 
         $profilSup=new Profil();
@@ -61,11 +63,10 @@ class EntrepriseController extends AbstractController
         $profilUtil=new Profil();
         $profilUtil->setLibelle('utilisateur');
         $entityManager->persist($profilUtil);
-        $Utilisateur->setUsername($data["username"]);
         $Utilisateur->setPassword($passwordEncoder->encodePassword($Utilisateur, $data["password"]));
         $Utilisateur->setProfil($profilAdm);
-        $Utilisateur->setNom($data["nom"]);
-        $Utilisateur->setEmail($data["email"]);
+        $Utilisateur->setImageFile($file); 
+        $Utilisateur->setUpdatedAt(new \DateTime());
         $Utilisateur->setTelephone(rand(770000000,779999999));
         $Utilisateur->setNci(strval(rand(150000000,979999999)));
         $Utilisateur->setStatus('Actif');
@@ -74,23 +75,18 @@ class EntrepriseController extends AbstractController
 
         $Entreprise= new Entreprise();
         $form = $this->createForm(EntrepriseType::class, $Entreprise);// liaison de notre formulaire avec l'objet de type depot
-        $data=json_decode($request->getContent(),true); //conversion de notre element de la requette
+        $data=$request->request->all(); //conversion de notre element de la requette
         $form->submit($data);
-
-        $Entreprise->setRaisonSociale($data["raisonsociale"]);
-        $Entreprise->setNinea($data["ninea"]);
-        $Entreprise->setAdresse($data["adresse"]);
-        $Entreprise->setStatus($data["status"]);
+        $Entreprise->setStatus('Actif');
         $Utilisateur->setEntreprise($Entreprise);
 
 
         $Compte= new Compte();
         $form = $this->createForm(CompteType::class, $Compte);// liaison de notre formulaire avec l'objet de type depot
-        $data=json_decode($request->getContent(),true); //conversion de notre element de la requette
+        $data=$request->request->all(); //conversion de notre element de la requette
         $form->submit($data);
 
         $Compte->setNumeroCompte($random);
-        $Compte->setSolde($data["solde"]);
         $Compte->setEntreprise($Entreprise);
         $entityManager = $this->getDoctrine()->getManager();
         
@@ -118,22 +114,20 @@ class EntrepriseController extends AbstractController
         $data=json_decode($request->getContent(),true); //conversion de notre element de la requette
         $form->submit($data);
         
-
-    
-            $repo = $this->getDoctrine()->getRepository(Compte::class);// recupere le repository compte
-            $Compte = $repo->findOneBy(['NumeroCompte' => $data["NumeroCompte"]]);//findOneBy(['numcompte' => $data->numcompte]recherche 
+        $repo = $this->getDoctrine()->getRepository(Compte::class);// recupere le repository compte
+        $Compte = $repo->findOneBy(['NumeroCompte' => $data["NumeroCompte"]]);//findOneBy(['numcompte' => $data->numcompte]recherche 
             
-           $depot->setDate(new \DateTime());// on remplit la date du depot a l'instant t
-           $depot->setUtilisateur($Userconnecte);// liaison du caissier avec depot
-           $depot->setMontant($data["Montant"]);
-           $depot->setCompte($Compte);
-           $Compte->setSolde($Compte->getSolde()+$depot->getMontant());// on rempli le nouveau solde du depot
-           $manager=$this->getDoctrine()->getManager();// recuperation de l'objet manager
-           $errors = $validator->validate($depot);
-            if (count($errors)) {
-                $errors = $serializer->serialize($errors, 'json');
-                return new Response($errors, 500, ['Content-Type' => 'Application/json']);
-            }
+        $depot->setDate(new \DateTime());// on remplit la date du depot a l'instant t
+        $depot->setUtilisateur($Userconnecte);// liaison du caissier avec depot
+        $depot->setMontant($data["Montant"]);
+        $depot->setCompte($Compte);
+        $Compte->setSolde($Compte->getSolde()+$depot->getMontant());// on rempli le nouveau solde du depot
+        $manager=$this->getDoctrine()->getManager();// recuperation de l'objet manager
+        $errors = $validator->validate($depot);
+        if (count($errors)) {
+        $errors = $serializer->serialize($errors, 'json');
+        return new Response($errors, 500, ['Content-Type' => 'Application/json']);
+        }
            $manager->persist($Compte);// nous permet d'ecrire dans la table entreprise
            $manager->persist($depot);//permet d'ecrire dans la table depot
            $manager->flush();
@@ -146,6 +140,5 @@ class EntrepriseController extends AbstractController
            return new JsonResponse($data, 201);// on retourne l'objet JSON
         
     }
-    
 
 }

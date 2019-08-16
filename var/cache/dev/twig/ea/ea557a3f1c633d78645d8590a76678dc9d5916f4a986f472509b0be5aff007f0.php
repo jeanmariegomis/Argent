@@ -154,6 +154,6 @@ class __TwigTemplate_e208636a066ddeecbbacb86a9e083744dfa8f082f2dc01f4a7e8a9b09ca
     </ul>
 </div>
 {% endblock %}
-", "security/index.html.twig", "/home/jean/argent/templates/security/index.html.twig");
+", "security/index.html.twig", "/home/jean/Argent/templates/security/index.html.twig");
     }
 }

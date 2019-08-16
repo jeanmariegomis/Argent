@@ -7,6 +7,7 @@ use App\Entity\Entreprise;
 use App\Entity\Utilisateur;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
@@ -50,15 +51,22 @@ class AppFixtures extends Fixture
         $SupUser=new Utilisateur();
         $password = $this->encoder->encodePassword ($SupUser, 'pass');
         $SupUser->setPassword($password);
+        
         $SupUser->setUsername('Jean')
+        ->setUpdatedAt(new \DateTime())
+        ->setEntreprise($wari)
+
+        ->setNom('Jean Marie')
+        ->setEmail('jean@gmail.com')
+        ->setTelephone(rand(770000000,779999999))
+        ->setNci(strval(rand(150000000,979999999)))
+        ->setStatus($actif)
+        ->setProfil($profilSup)
              ->setRoles(['ROLE_Super-admin'])
-             ->setEntreprise($wari)
-             ->setNom('Jean Marie')
-             ->setEmail('jean@gmail.com')
-             ->setTelephone(rand(770000000,779999999))
-             ->setNci(strval(rand(150000000,979999999)))
-             ->setStatus($actif)
-             ->setProfil($profilSup); 
+             ->setImageName('image.png');
+           
+             
+             
         $manager->persist($SupUser);
         $manager->flush();
     }

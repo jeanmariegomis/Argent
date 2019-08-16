@@ -104,6 +104,6 @@ class __TwigTemplate_8cb5d6ea8a9390024b5752add35f7ce06b5ade3103a748019544be3a04b
   {{ include('@Twig/Exception/trace.txt.twig', { trace: trace }, with_context = false) }}
 {% endfor %}
 {% endif %}
-", "@Twig/Exception/traces.txt.twig", "/home/jean/argent/vendor/symfony/twig-bundle/Resources/views/Exception/traces.txt.twig");
+", "@Twig/Exception/traces.txt.twig", "/home/jean/Argent/vendor/symfony/twig-bundle/Resources/views/Exception/traces.txt.twig");
     }
 }

@@ -227,6 +227,6 @@ class __TwigTemplate_50c1ce3d518391cd627ead0510042caf50f06d121d88501c3325153076e
         </div>
     </form>
 </div>
-", "@WebProfiler/Profiler/search.html.twig", "/home/jean/argent/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/search.html.twig");
+", "@WebProfiler/Profiler/search.html.twig", "/home/jean/Argent/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/search.html.twig");
     }
 }

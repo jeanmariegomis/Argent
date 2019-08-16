@@ -375,6 +375,6 @@ class __TwigTemplate_47eff22fb3024b9601aec1309bd55602480b51f0600bafcfe93d0a9f603
 
 </body>
 </html>
-", "@ApiPlatform/SwaggerUi/index.html.twig", "/home/jean/argent/vendor/api-platform/core/src/Bridge/Symfony/Bundle/Resources/views/SwaggerUi/index.html.twig");
+", "@ApiPlatform/SwaggerUi/index.html.twig", "/home/jean/Argent/vendor/api-platform/core/src/Bridge/Symfony/Bundle/Resources/views/SwaggerUi/index.html.twig");
     }
 }
