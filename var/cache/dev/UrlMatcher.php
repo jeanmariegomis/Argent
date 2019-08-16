@@ -15,6 +15,7 @@ return [
         '/_profiler/open' => [[['_route' => '_profiler_open_file', '_controller' => 'web_profiler.controller.profiler::openAction'], null, null, null, false, false, null]],
         '/api/entreprise' => [[['_route' => 'entreprise', '_controller' => 'App\\Controller\\EntrepriseController::enregistrer'], null, ['POST' => 0], null, false, false, null]],
         '/api/depot' => [[['_route' => 'depot', '_controller' => 'App\\Controller\\EntrepriseController::depot'], null, ['POST' => 0], null, false, false, null]],
+        '/api/bloque' => [[['_route' => 'bloque', '_controller' => 'App\\Controller\\EntrepriseController::bloque'], null, ['POST' => 0], null, false, false, null]],
         '/api/register' => [[['_route' => 'register', '_controller' => 'App\\Controller\\SecurityController::register'], null, ['POST' => 0], null, false, false, null]],
         '/api/login_check' => [
             [['_route' => 'login', '_controller' => 'App\\Controller\\SecurityController::login'], null, ['POST' => 0], null, false, false, null],

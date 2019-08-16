@@ -14,7 +14,9 @@ use App\Form\EntrepriseType;
 use App\Form\UtilisateurType;
 use App\Repository\EntrepriseRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,7 +24,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Security\Core\User\DatetimeInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -139,6 +140,44 @@ class EntrepriseController extends AbstractController
            
            return new JsonResponse($data, 201);// on retourne l'objet JSON
         
+    }
+
+    /**
+    * @Route("/bloque", name="bloque", methods={"POST"})
+    */
+    public function bloque(Request $request, SerializerInterface $serializer,ValidatorInterface $validator, EntityManagerInterface $entityManager, ObjectManager $manager)
+        
+
+
+    {
+
+        $Entreprise= new Entreprise();
+        $form = $this->createForm(EntrepriseType::class, $Entreprise);// liaison de notre formulaire avec l'objet de type depot
+        $data=$request->request->all(); //conversion de notre element de la requette
+        $form->submit($data);
+        $Entreprise->setStatus('Actif');
+
+        if($Entreprise->getRaisonSociale()=='Wari'){
+            return new Response('Impossible de bloqué ce partenaire', 409, [
+                'Content-Type' => 'application/json'
+            ]);
+        }
+        elseif($Entreprise->getStatus() == "Actif"){
+            $Entreprise->setStatus("bloqué");
+            $reponse= new Response('Partenaire bloqué', 200, [
+                'Content-Type' => 'application/json'
+            ]);
+
+        }
+        else{
+            $Entreprise->setStatus("Actif");
+            $reponse= new Response('Partenaire débloqué', 200, [
+                'Content-Type' => 'application/json'
+            ]);
+        }
+        $manager->persist($Entreprise);
+        $manager->flush();
+        return $reponse;
     }
 
 }

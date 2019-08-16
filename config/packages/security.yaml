@@ -16,14 +16,17 @@ security:
             security: false
         login:
             pattern:  ^/api/login
+            user_checker : app.user_checker # je l'ai mis dans services.yaml pour les utilisateurs bloqués
             stateless: true
             anonymous: true
+            provider: app_user_provider  # pour voir le site on doit se connecter et notre provider de reference pour ce connecté est in_database
+
             json_login:
                 check_path:               /api/login_check
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
-
         api:
+            http_basic : ~ #pour les testes
             pattern:   ^/api
             stateless: true
             guard:

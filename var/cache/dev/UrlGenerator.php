@@ -17,6 +17,7 @@ return [
     '_profiler_exception_css' => [['token'], ['_controller' => 'web_profiler.controller.exception::cssAction'], [], [['text', '/exception.css'], ['variable', '/', '[^/]++', 'token', true], ['text', '/_profiler']], [], []],
     'entreprise' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::enregistrer'], [], [['text', '/api/entreprise']], [], []],
     'depot' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::depot'], [], [['text', '/api/depot']], [], []],
+    'bloque' => [[], ['_controller' => 'App\\Controller\\EntrepriseController::bloque'], [], [['text', '/api/bloque']], [], []],
     'register' => [[], ['_controller' => 'App\\Controller\\SecurityController::register'], [], [['text', '/api/register']], [], []],
     'login' => [[], ['_controller' => 'App\\Controller\\SecurityController::login'], [], [['text', '/api/login_check']], [], []],
     'api_entrypoint' => [['index', '_format'], ['_controller' => 'api_platform.action.entrypoint', '_format' => '', '_api_respond' => 'true', 'index' => 'index'], ['index' => 'index'], [['variable', '.', '[^/]++', '_format', true], ['variable', '/', 'index', 'index', true], ['text', '/api']], [], []],
