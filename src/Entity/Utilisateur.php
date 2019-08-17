@@ -125,11 +125,23 @@ class Utilisateur implements UserInterface
      */
     private $depots;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="UserEmetteur")
+     */
+    private $envois;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="UserRecepteur")
+     */
+    private $retraits;
+
 
 
     public function __construct()
     {
         $this->depots = new ArrayCollection();
+        $this->envois = new ArrayCollection();
+        $this->retraits = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -357,6 +369,68 @@ class Utilisateur implements UserInterface
     public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Transaction[]
+     */
+    public function getEnvois(): Collection
+    {
+        return $this->envois;
+    }
+
+    public function addEnvois(Transaction $envois): self
+    {
+        if (!$this->envois->contains($envois)) {
+            $this->envois[] = $envois;
+            $envois->setUserEmetteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEnvois(Transaction $envois): self
+    {
+        if ($this->envois->contains($envois)) {
+            $this->envois->removeElement($envois);
+            // set the owning side to null (unless already changed)
+            if ($envois->getUserEmetteur() === $this) {
+                $envois->setUserEmetteur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Transaction[]
+     */
+    public function getRetraits(): Collection
+    {
+        return $this->retraits;
+    }
+
+    public function addRetrait(Transaction $retrait): self
+    {
+        if (!$this->retraits->contains($retrait)) {
+            $this->retraits[] = $retrait;
+            $retrait->setUserRecepteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRetrait(Transaction $retrait): self
+    {
+        if ($this->retraits->contains($retrait)) {
+            $this->retraits->removeElement($retrait);
+            // set the owning side to null (unless already changed)
+            if ($retrait->getUserRecepteur() === $this) {
+                $retrait->setUserRecepteur(null);
+            }
+        }
 
         return $this;
     }

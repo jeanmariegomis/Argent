@@ -291,3 +291,10 @@ ab5bde,127.0.0.1,POST,http://localhost:8000/api/bloque,1565968258,,500
 c7ebee,127.0.0.1,GET,http://localhost:8000/api/bloque,1565968809,9d721e,200
 9d721e,127.0.0.1,POST,http://localhost:8000/api/bloque,1565968809,,500
 aa994e,127.0.0.1,POST,http://localhost:8000/api/bloque,1565968854,,200
+6b5071,127.0.0.1,POST,http://localhost:8000/api/bloque,1565970719,,200
+6f45be,127.0.0.1,GET,http://localhost:8000/pdf,1565976340,730763,200
+730763,127.0.0.1,GET,http://localhost:8000/pdf,1565976340,,500
+0d9b0f,127.0.0.1,GET,http://localhost:8000/pdf,1565976375,00d10a,200
+00d10a,127.0.0.1,GET,http://localhost:8000/pdf,1565976375,,500
+474c92,127.0.0.1,GET,http://localhost:8000/pdf,1566050736,082178,200
+082178,127.0.0.1,GET,http://localhost:8000/pdf,1566050737,,500
