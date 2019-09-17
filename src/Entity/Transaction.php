@@ -19,29 +19,9 @@ class Transaction
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="bigint")
      */
-    private $ClientEmetteur;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $TelephoneEmetteur;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $NciEmetteur;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $DateEnvoi;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $Code;
+    private $code;
 
     /**
      * @ORM\Column(type="bigint")
@@ -51,121 +31,69 @@ class Transaction
     /**
      * @ORM\Column(type="bigint")
      */
-    private $Frais;
+    private $comenvoi;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $ClientRecepteur;
+    private $comretrait;
+
+    /**
+     * @ORM\Column(type="bigint")
+     */
+    private $cometat;
+
+    /**
+     * @ORM\Column(type="bigint")
+     */
+    private $comsys;
+
+    /**
+     * @ORM\Column(type="bigint")
+     */
+    private $frais;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $TelephoneRecepteur;
+    private $type;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="datetime")
      */
-    private $NciRecepteur;
+    private $dateenvoi;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $Datereception;
-
-    /**
-     * @ORM\Column(type="bigint", nullable=true)
-     */
-    private $CommissionEmetteur;
-
-    /**
-     * @ORM\Column(type="bigint", nullable=true)
-     */
-    private $CommissionReceptteur;
-
-    /**
-     * @ORM\Column(type="bigint", nullable=true)
-     */
-    private $CommissionWari;
-
-    /**
-     * @ORM\Column(type="bigint", nullable=true)
-     */
-    private $TaxesEtat;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Utilisateur", inversedBy="envois")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Expediteur", inversedBy="transactions")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $UserEmetteur;
+    private $expediteur;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Utilisateur", inversedBy="retraits")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Beneficiaire", inversedBy="transactions")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $UserRecepteur;
+    private $beneficiaire;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Utilisateur", inversedBy="transactions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $Utilisateur;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getClientEmetteur(): ?string
+    public function getCode(): ?int
     {
-        return $this->ClientEmetteur;
+        return $this->code;
     }
 
-    public function setClientEmetteur(string $ClientEmetteur): self
+    public function setCode(int $code): self
     {
-        $this->ClientEmetteur = $ClientEmetteur;
-
-        return $this;
-    }
-
-    public function getTelephoneEmetteur(): ?string
-    {
-        return $this->TelephoneEmetteur;
-    }
-
-    public function setTelephoneEmetteur(string $TelephoneEmetteur): self
-    {
-        $this->TelephoneEmetteur = $TelephoneEmetteur;
-
-        return $this;
-    }
-
-    public function getNciEmetteur(): ?string
-    {
-        return $this->NciEmetteur;
-    }
-
-    public function setNciEmetteur(string $NciEmetteur): self
-    {
-        $this->NciEmetteur = $NciEmetteur;
-
-        return $this;
-    }
-
-    public function getDateEnvoi(): ?\DateTimeInterface
-    {
-        return $this->DateEnvoi;
-    }
-
-    public function setDateEnvoi(\DateTimeInterface $DateEnvoi): self
-    {
-        $this->DateEnvoi = $DateEnvoi;
-
-        return $this;
-    }
-
-    public function getCode(): ?string
-    {
-        return $this->Code;
-    }
-
-    public function setCode(string $Code): self
-    {
-        $this->Code = $Code;
+        $this->code = $code;
 
         return $this;
     }
@@ -182,134 +110,122 @@ class Transaction
         return $this;
     }
 
+    public function getComenvoi(): ?int
+    {
+        return $this->comenvoi;
+    }
+
+    public function setComenvoi(int $comenvoi): self
+    {
+        $this->comenvoi = $comenvoi;
+
+        return $this;
+    }
+
+    public function getComretrait(): ?string
+    {
+        return $this->comretrait;
+    }
+
+    public function setComretrait(string $comretrait): self
+    {
+        $this->comretrait = $comretrait;
+
+        return $this;
+    }
+
+    public function getCometat(): ?int
+    {
+        return $this->cometat;
+    }
+
+    public function setCometat(int $cometat): self
+    {
+        $this->cometat = $cometat;
+
+        return $this;
+    }
+
+    public function getComsys(): ?int
+    {
+        return $this->comsys;
+    }
+
+    public function setComsys(int $comsys): self
+    {
+        $this->comsys = $comsys;
+
+        return $this;
+    }
+
     public function getFrais(): ?int
     {
-        return $this->Frais;
+        return $this->frais;
     }
 
-    public function setFrais(int $Frais): self
+    public function setFrais(int $frais): self
     {
-        $this->Frais = $Frais;
+        $this->frais = $frais;
 
         return $this;
     }
 
-    public function getClientRecepteur(): ?string
+    public function getType(): ?string
     {
-        return $this->ClientRecepteur;
+        return $this->type;
     }
 
-    public function setClientRecepteur(string $ClientRecepteur): self
+    public function setType(string $type): self
     {
-        $this->ClientRecepteur = $ClientRecepteur;
+        $this->type = $type;
 
         return $this;
     }
 
-    public function getTelephoneRecepteur(): ?string
+    public function getDateenvoi(): ?\DateTimeInterface
     {
-        return $this->TelephoneRecepteur;
+        return $this->dateenvoi;
     }
 
-    public function setTelephoneRecepteur(string $TelephoneRecepteur): self
+    public function setDateenvoi(\DateTimeInterface $dateenvoi): self
     {
-        $this->TelephoneRecepteur = $TelephoneRecepteur;
+        $this->dateenvoi = $dateenvoi;
 
         return $this;
     }
 
-    public function getNciRecepteur(): ?string
+    public function getExpediteur(): ?Expediteur
     {
-        return $this->NciRecepteur;
+        return $this->expediteur;
     }
 
-    public function setNciRecepteur(string $NciRecepteur): self
+    public function setExpediteur(?Expediteur $expediteur): self
     {
-        $this->NciRecepteur = $NciRecepteur;
+        $this->expediteur = $expediteur;
 
         return $this;
     }
 
-    public function getDatereception(): ?\DateTimeInterface
+    public function getBeneficiaire(): ?Beneficiaire
     {
-        return $this->Datereception;
+        return $this->beneficiaire;
     }
 
-    public function setDatereception(?\DateTimeInterface $Datereception): self
+    public function setBeneficiaire(?Beneficiaire $beneficiaire): self
     {
-        $this->Datereception = $Datereception;
+        $this->beneficiaire = $beneficiaire;
 
         return $this;
     }
 
-    public function getCommissionEmetteur(): ?int
+    public function getUtilisateur(): ?Utilisateur
     {
-        return $this->CommissionEmetteur;
+        return $this->Utilisateur;
     }
 
-    public function setCommissionEmetteur(?int $CommissionEmetteur): self
+    public function setUtilisateur(?Utilisateur $Utilisateur): self
     {
-        $this->CommissionEmetteur = $CommissionEmetteur;
-
-        return $this;
-    }
-
-    public function getCommissionReceptteur(): ?int
-    {
-        return $this->CommissionReceptteur;
-    }
-
-    public function setCommissionReceptteur(?int $CommissionReceptteur): self
-    {
-        $this->CommissionReceptteur = $CommissionReceptteur;
-
-        return $this;
-    }
-
-    public function getCommissionWari(): ?int
-    {
-        return $this->CommissionWari;
-    }
-
-    public function setCommissionWari(?int $CommissionWari): self
-    {
-        $this->CommissionWari = $CommissionWari;
-
-        return $this;
-    }
-
-    public function getTaxesEtat(): ?int
-    {
-        return $this->TaxesEtat;
-    }
-
-    public function setTaxesEtat(?int $TaxesEtat): self
-    {
-        $this->TaxesEtat = $TaxesEtat;
-
-        return $this;
-    }
-
-    public function getUserEmetteur(): ?Utilisateur
-    {
-        return $this->UserEmetteur;
-    }
-
-    public function setUserEmetteur(?Utilisateur $UserEmetteur): self
-    {
-        $this->UserEmetteur = $UserEmetteur;
-
-        return $this;
-    }
-
-    public function getUserRecepteur(): ?Utilisateur
-    {
-        return $this->UserRecepteur;
-    }
-
-    public function setUserRecepteur(?Utilisateur $UserRecepteur): self
-    {
-        $this->UserRecepteur = $UserRecepteur;
+        $this->Utilisateur = $Utilisateur;
 
         return $this;
     }

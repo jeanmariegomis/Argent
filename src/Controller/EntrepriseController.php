@@ -1,19 +1,23 @@
 <?php
 
 namespace App\Controller;
-
 use App\Entity\User;
 use App\Entity\Depot;
 use App\Entity\Compte;
 use App\Entity\Profil;
+use App\Entity\Tarifs;
 use App\Form\DepotType;
 use App\Form\CompteType;
 use App\Entity\Entreprise;
+use App\Entity\Transaction;
 use App\Entity\Utilisateur;
 use App\Form\EntrepriseType;
+use App\Form\TransactionType;
 use App\Form\UtilisateurType;
+use JMS\Serializer\SerializerBuilder;
 use App\Repository\EntrepriseRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\UtilisateurRepository;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -36,7 +40,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class EntrepriseController extends AbstractController
 {
     /** 
-     * @Route("/entreprise", name="entreprise", methods={"POST"})
+     * @Route("/register", name="entreprise", methods={"POST"})
      */
     public function enregistrer(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder,ValidatorInterface $validator,SerializerInterface $serializer): Response
     {
@@ -50,28 +54,26 @@ class EntrepriseController extends AbstractController
         $form->submit($data);
 
         $profilSup=new Profil();
-        $profilSup->setLibelle('Super-admin');
+        $profilSup->setLibelle('SuperAdmin');
         $entityManager->persist($profilSup);
         $profilCaiss=new Profil();
         $profilCaiss->setLibelle('Caissier');
         $entityManager->persist($profilCaiss);
         $profilAdP=new Profil();
-        $profilAdP->setLibelle('admin-Principal');
+        $profilAdP->setLibelle('AdminPrincipal');
         $entityManager->persist($profilAdP);
         $profilAdm=new Profil();
-        $profilAdm->setLibelle('admin');
+        $profilAdm->setLibelle('Admin');
         $entityManager->persist($profilAdm);
-        $profilUtil=new Profil();
-        $profilUtil->setLibelle('utilisateur');
-        $entityManager->persist($profilUtil);
+      
         $Utilisateur->setPassword($passwordEncoder->encodePassword($Utilisateur, $data["password"]));
-        $Utilisateur->setProfil($profilAdm);
+        $Utilisateur->setProfil($profilCaiss);
         $Utilisateur->setImageFile($file); 
         $Utilisateur->setUpdatedAt(new \DateTime());
         $Utilisateur->setTelephone(rand(770000000,779999999));
         $Utilisateur->setNci(strval(rand(150000000,979999999)));
         $Utilisateur->setStatus('Actif');
-        $Utilisateur->setRoles(['ROLE_ADMIN']);
+        $Utilisateur->setRoles(['ROLE_AdminPrincipal']);
       
 
         $Entreprise= new Entreprise();
@@ -86,6 +88,7 @@ class EntrepriseController extends AbstractController
         $form = $this->createForm(CompteType::class, $Compte);// liaison de notre formulaire avec l'objet de type depot
         $data=$request->request->all(); //conversion de notre element de la requette
         $form->submit($data);
+
 
         $Compte->setNumeroCompte($random);
         $Compte->setEntreprise($Entreprise);
@@ -103,6 +106,100 @@ class EntrepriseController extends AbstractController
     }
 
 
+     /**
+     * @Route("/list/entreprise", name="list_entreprise", methods={"GET"})
+     */
+    public function liste(EntrepriseRepository $EntrepriseRepository, SerializerInterface $serializer)
+    {
+        $Entreprises = $EntrepriseRepository->findAll();
+        $data = $serializer->serialize($Entreprises, 'json');
+
+        return new Response($data, 200, [
+            'Content-Type' => 'application/json'
+        ]);
+    }
+
+
+
+     /**
+     * @Route("/list/utilisateur", name="list_utilisateur", methods={"GET"})
+     */
+    public function lister(UtilisateurRepository $UtilisateurRepository, SerializerInterface $serializer)
+    {
+        $Utilisateur = $UtilisateurRepository->findAll();
+        $data = $serializer->serialize($Utilisateur, 'json');
+
+        return new Response($data, 200, [
+            'Content-Type' => 'application/json'
+        ]);
+    }
+
+
+    /**
+     * @Route("/utilisateur", name="utilisateur", methods={"POST"})
+     */
+    public function ajouter(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder,ValidatorInterface $validator,SerializerInterface $serializer): Response
+    
+    {   
+
+    $Utilisateur= new Utilisateur();
+
+    $form = $this->createForm(UtilisateurType::class, $Utilisateur);// liaison de notre formulaire avec l'objet de type depot
+    $data=$request->request->all(); //conversion de notre element de la requette
+    $file=$request->files->all()['imageFile'];
+
+    $form->submit($data);
+
+    $profilSup=new Profil();
+    $profilSup->setLibelle('ROLE_SuperAdmin');
+    $entityManager->persist($profilSup);
+    $profilCaiss=new Profil();
+    $profilCaiss->setLibelle('ROLE_Caissier');
+    $entityManager->persist($profilCaiss);
+    $profilAdP=new Profil();
+    $profilAdP->setLibelle('ROLE_AdminPrincipal');
+    $entityManager->persist($profilAdP);
+    $profilAdm=new Profil();
+    $profilAdm->setLibelle('ROLE_Admin');
+    $entityManager->persist($profilAdm);
+   
+    $Utilisateur->setPassword($passwordEncoder->encodePassword($Utilisateur, $data["password"]));
+    $Utilisateur->setProfil($profilSup);
+    $Utilisateur->setImageFile($file); 
+    $Utilisateur->setUpdatedAt(new \DateTime());
+    $Utilisateur->setTelephone(rand(770000000,779999999));
+    $Utilisateur->setNci(strval(rand(150000000,979999999)));
+    $Utilisateur->setStatus('Actif');
+    $Utilisateur->setRoles(['ROLE_AdminPrincipal']);
+  
+    $entityManager->persist($Utilisateur);
+    $entityManager->flush();
+
+    return new Response('L\'utilisateur a été ajouté',Response::HTTP_CREATED); 
+
+
+}
+
+
+ /**
+     * @Route("/entreprise", name="entreprise", methods={"POST"})
+     */
+    public function ajout(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder,ValidatorInterface $validator,SerializerInterface $serializer): Response
+    
+    { 
+        $Entreprise= new Entreprise();
+        $form = $this->createForm(EntrepriseType::class, $Entreprise);// liaison de notre formulaire avec l'objet de type depot
+        $data=$request->request->all(); //conversion de notre element de la requette
+        $form->submit($data);
+        $Entreprise->setStatus('Actif');
+
+        $entityManager->persist($Entreprise);
+        $entityManager->flush();
+
+        return new Response('Le Partenaire a été ajouté',Response::HTTP_CREATED); 
+
+    }
+
      /** 
      * @Route("/depot", name="depot", methods={"POST"})
      */
@@ -113,11 +210,11 @@ class EntrepriseController extends AbstractController
         $depot = new Depot();//creation d'un objet de type depot
         $form = $this->createForm(DepotType::class, $depot);// liaison de notre formulaire avec l'objet de type depot
         $data=json_decode($request->getContent(),true); //conversion de notre element de la requette
+        //$data=$request->request->all();
         $form->submit($data);
-        
         $repo = $this->getDoctrine()->getRepository(Compte::class);// recupere le repository compte
         $Compte = $repo->findOneBy(['NumeroCompte' => $data["NumeroCompte"]]);//findOneBy(['numcompte' => $data->numcompte]recherche 
-            
+        
         $depot->setDate(new \DateTime());// on remplit la date du depot a l'instant t
         $depot->setUtilisateur($Userconnecte);// liaison du caissier avec depot
         $depot->setMontant($data["Montant"]);
@@ -179,5 +276,38 @@ class EntrepriseController extends AbstractController
         $manager->flush();
         return $reponse;
     }
+
+    /** 
+     * @Route("/bloquer/{id}" , name="bloquer", methods={"GET"})
+     */
+    public function bloquerdebloquer(Request $request,  Utilisateur $Utilisateurs,UtilisateurRepository $UtilisateurRepo, EntityManagerInterface $entityManager): Response
+    {
+        $values = json_decode($request->getContent());
+        $Utilisateur=$UtilisateurRepo->find($Utilisateurs->getId());        
+        if ($Utilisateur->getStatus() == "debloquer") {
+            $Utilisateur->SetStatus("bloquer");
+            $entityManager->flush();
+            $data = [
+                'statu' => 200,
+                'messag' => 'utilisateur bloquer'
+            ];
+            return new JsonResponse($data);
+        } else {
+            $Utilisateur->SetStatus("debloquer");
+            $entityManager->flush();
+            $data = [
+                'status' => 200,
+                'message' => 'utilisateur debloquer'
+            ];
+            return new JsonResponse($data);
+        }
+    }
+
+     
+
+
+
+   
+    
 
 }

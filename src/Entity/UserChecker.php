@@ -9,9 +9,9 @@ use Symfony\Component\Security\Core\User\UserCheckerInterface ;
 
 class UserChecker implements UserCheckerInterface
 {//gerer dans security.yaml avec user_checker et dans services.yaml 
-    public function checkPreAuth ( UserInterface $user )
+    public function checkPreAuth ( UserInterface $Utilisateur )
     {
-        if ( ! $Utilisateur instanceof Utilisateur ) {//si l'utilisateur n'existe pas ne rien retourner
+        if ( !$Utilisateur instanceof Utilisateur ) {//si l'utilisateur n'existe pas ne rien retourner
             return ;
         }
 

@@ -19,14 +19,14 @@ class Depot
     private $id;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $Montant;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $Date;
-
-    /**
-     * @ORM\Column(type="bigint")
-     */
-    private $Montant;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Compte", inversedBy="depots")
@@ -45,6 +45,8 @@ class Depot
         return $this->id;
     }
 
+    
+
     public function getDate(): ?\DateTimeInterface
     {
         return $this->Date;
@@ -53,18 +55,6 @@ class Depot
     public function setDate(\DateTimeInterface $Date): self
     {
         $this->Date = $Date;
-
-        return $this;
-    }
-
-    public function getMontant(): ?int
-    {
-        return $this->Montant;
-    }
-
-    public function setMontant(int $Montant): self
-    {
-        $this->Montant = $Montant;
 
         return $this;
     }
@@ -89,6 +79,26 @@ class Depot
     public function setUtilisateur(?Utilisateur $Utilisateur): self
     {
         $this->Utilisateur = $Utilisateur;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of Montant
+     */ 
+    public function getMontant()
+    {
+        return $this->Montant;
+    }
+
+    /**
+     * Set the value of Montant
+     *
+     * @return  self
+     */ 
+    public function setMontant($Montant)
+    {
+        $this->Montant = $Montant;
 
         return $this;
     }

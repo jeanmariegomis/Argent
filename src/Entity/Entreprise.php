@@ -50,6 +50,9 @@ class Entreprise
      */
     private $comptes;
 
+    
+
+    
     public function __construct()
     {
         $this->utilisateurs = new ArrayCollection();
@@ -170,4 +173,7 @@ class Entreprise
 
         return $this;
     }
+
+
+
 }

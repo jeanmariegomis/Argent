@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use JMS\Serializer\SerializerBuilder;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -120,28 +122,35 @@ class Utilisateur implements UserInterface
      */
     private $Entreprise;
 
+    
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Compte", inversedBy="utilisateurs")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $Compte;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="Utilisateur")
+     */
+    private $transactions;
+
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Depot", mappedBy="Utilisateur")
      */
     private $depots;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="UserEmetteur")
-     */
-    private $envois;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="UserRecepteur")
-     */
-    private $retraits;
 
 
 
     public function __construct()
     {
-        $this->depots = new ArrayCollection();
         $this->envois = new ArrayCollection();
         $this->retraits = new ArrayCollection();
+        $this->transactions = new ArrayCollection();
+        $this->depots = new ArrayCollection();
+        
     }
 
     public function getId(): ?int
@@ -301,38 +310,6 @@ class Utilisateur implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Depot[]
-     */
-    public function getDepots(): Collection
-    {
-        return $this->depots;
-    }
-
-    public function addDepot(Depot $depot): self
-    {
-        if (!$this->depots->contains($depot)) {
-            $this->depots[] = $depot;
-            $depot->setUtilisateur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDepot(Depot $depot): self
-    {
-        if ($this->depots->contains($depot)) {
-            $this->depots->removeElement($depot);
-            // set the owning side to null (unless already changed)
-            if ($depot->getUtilisateur() === $this) {
-                $depot->setUtilisateur(null);
-            }
-        }
-
-        return $this;
-    }
-
-
     public function getImageFile(): ?File
     {
         return $this->imageFile;
@@ -373,33 +350,15 @@ class Utilisateur implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Transaction[]
-     */
-    public function getEnvois(): Collection
+
+    public function getCompte(): ?Compte
     {
-        return $this->envois;
+        return $this->Compte;
     }
 
-    public function addEnvois(Transaction $envois): self
+    public function setCompte(?Compte $Compte): self
     {
-        if (!$this->envois->contains($envois)) {
-            $this->envois[] = $envois;
-            $envois->setUserEmetteur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEnvois(Transaction $envois): self
-    {
-        if ($this->envois->contains($envois)) {
-            $this->envois->removeElement($envois);
-            // set the owning side to null (unless already changed)
-            if ($envois->getUserEmetteur() === $this) {
-                $envois->setUserEmetteur(null);
-            }
-        }
+        $this->Compte = $Compte;
 
         return $this;
     }
@@ -407,31 +366,65 @@ class Utilisateur implements UserInterface
     /**
      * @return Collection|Transaction[]
      */
-    public function getRetraits(): Collection
+    public function getTransactions(): Collection
     {
-        return $this->retraits;
+        return $this->transactions;
     }
 
-    public function addRetrait(Transaction $retrait): self
+    public function addTransaction(Transaction $transaction): self
     {
-        if (!$this->retraits->contains($retrait)) {
-            $this->retraits[] = $retrait;
-            $retrait->setUserRecepteur($this);
+        if (!$this->transactions->contains($transaction)) {
+            $this->transactions[] = $transaction;
+            $transaction->setUtilisateur($this);
         }
 
         return $this;
     }
 
-    public function removeRetrait(Transaction $retrait): self
+    public function removeTransaction(Transaction $transaction): self
     {
-        if ($this->retraits->contains($retrait)) {
-            $this->retraits->removeElement($retrait);
+        if ($this->transactions->contains($transaction)) {
+            $this->transactions->removeElement($transaction);
             // set the owning side to null (unless already changed)
-            if ($retrait->getUserRecepteur() === $this) {
-                $retrait->setUserRecepteur(null);
+            if ($transaction->getUtilisateur() === $this) {
+                $transaction->setUtilisateur(null);
             }
         }
 
         return $this;
     }
+
+    /**
+     * @return Collection|Depot[]
+     */
+    public function getDepots(): Collection
+    {
+        return $this->depots;
+    }
+
+    public function addDepot(Depot $depot): self
+    {
+        if (!$this->depots->contains($depot)) {
+            $this->depots[] = $depot;
+            $depot->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDepot(Depot $depot): self
+    {
+        if ($this->depots->contains($depot)) {
+            $this->depots->removeElement($depot);
+            // set the owning side to null (unless already changed)
+            if ($depot->getUtilisateur() === $this) {
+                $depot->setUtilisateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+   
 }

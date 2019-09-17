@@ -14,7 +14,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
 
 /**
 * @Route("/api")
@@ -85,16 +87,55 @@ $data = [
 ];
 return new JsonResponse($data, 500);
 }
-  /**
+ /**
      * @Route("/login_check", name="login", methods={"POST"})
+     * @param JWTEncoderInterface $JWTEncoder
+     * @throws \Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException
      */
-    public function login(Request $request)
+    public function login(Request $request, JWTEncoderInterface  $JWTEncoder)
+    { 
+   
+       $values = json_decode($request->getContent());
+        $username   = $values->username; // json-string
+        $password   = $values->password; // json-string
+
+            $repo = $this->getDoctrine()->getRepository(User::class);
+            $user = $repo-> findOneBy(['username' => $username]);
+            if(!$user){
+                return $this->json([
+                        'message' => 'Username incorrect'
+                    ]);
+            }
+
+            $isValid = $this->passwordEncoder
+            ->isPasswordValid($user, $password);
+            if(!$isValid){ 
+                return $this->json([
+                    'message' => 'Mot de passe incorect'
+                ]);
+            }
+            if($user->getEtat()=="bloquer"){
+                return $this->json([
+                    'message' => 'ACCÈS REFUSÉ vous ne pouvez pas connecter !'
+                ]);
+            }
+            $token = $JWTEncoder->encode([
+                'username' => $user->getUsername(),
+                'exp' => time() + 86400 // 1 day expiration
+            ]);
+
+            return $this->json([
+                'token' => $token
+            ]);
+                
+    }
+
+
+private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
-        $user = $this->getUser();
-        return $this->json([
-            'username' => $user->getUsername(),
-            'roles' => $user->getRoles()
-        ]);
+        $this->passwordEncoder = $passwordEncoder;
     }
 
 }

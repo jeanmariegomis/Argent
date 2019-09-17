@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Profil;
 use App\Entity\Entreprise;
 use App\Entity\Utilisateur;
+use App\Entity\Compte;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Validator\Constraints\DateTime;
@@ -21,7 +22,7 @@ class AppFixtures extends Fixture
     {
         $actif='Actif';
         $profilSup=new Profil();
-        $profilSup->setLibelle('Super-admin');
+        $profilSup->setLibelle('Super_Admin');
 
         $manager->persist($profilSup);
         
@@ -30,16 +31,13 @@ class AppFixtures extends Fixture
         $manager->persist($profilCaiss);
         
         $profilAdP=new Profil();
-        $profilAdP->setLibelle('admin-Principal');
+        $profilAdP->setLibelle('Admin_Principal');
         $manager->persist($profilAdP);
         
         $profilAdm=new Profil();
-        $profilAdm->setLibelle('admin');
+        $profilAdm->setLibelle('Admin');
         $manager->persist($profilAdm);
         
-        $profilUtil=new Profil();
-        $profilUtil->setLibelle('utilisateur');
-        $manager->persist($profilUtil);
         
 
         $wari=new Entreprise();
@@ -47,7 +45,13 @@ class AppFixtures extends Fixture
                     ->setNinea(strval(rand(150000000,979999999)))
                     ->setAdresse('Zig')
                     ->setStatus($actif);
-        $manager->persist($wari);
+        $manager->persist($wari);   
+
+        // $comt= new Compte();
+        // $comt->setNumeroCompte(1234)
+        //      ->setSolde(0);
+        // $manager->persist($comt);     
+
         $SupUser=new Utilisateur();
         $password = $this->encoder->encodePassword ($SupUser, 'pass');
         $SupUser->setPassword($password);
@@ -62,7 +66,7 @@ class AppFixtures extends Fixture
         ->setNci(strval(rand(150000000,979999999)))
         ->setStatus($actif)
         ->setProfil($profilSup)
-             ->setRoles(['ROLE_Super-admin'])
+             ->setRoles(['ROLE_SuperAdmin'])
              ->setImageName('image.png');
            
              
