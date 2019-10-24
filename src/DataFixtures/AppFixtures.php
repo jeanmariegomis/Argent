@@ -22,7 +22,7 @@ class AppFixtures extends Fixture
     {
         $actif='Actif';
         $profilSup=new Profil();
-        $profilSup->setLibelle('Super_Admin');
+        $profilSup->setLibelle('SuperAdmin');
 
         $manager->persist($profilSup);
         
@@ -31,7 +31,7 @@ class AppFixtures extends Fixture
         $manager->persist($profilCaiss);
         
         $profilAdP=new Profil();
-        $profilAdP->setLibelle('Admin_Principal');
+        $profilAdP->setLibelle('AdminPrincipal');
         $manager->persist($profilAdP);
         
         $profilAdm=new Profil();

@@ -15,6 +15,7 @@ return [
         '/_profiler/open' => [[['_route' => '_profiler_open_file', '_controller' => 'web_profiler.controller.profiler::openAction'], null, null, null, false, false, null]],
         '/beneficiaire' => [[['_route' => 'beneficiaire_index', '_controller' => 'App\\Controller\\BeneficiaireController::index'], null, ['GET' => 0], null, true, false, null]],
         '/beneficiaire/new' => [[['_route' => 'beneficiaire_new', '_controller' => 'App\\Controller\\BeneficiaireController::new'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
+        '/api/enregistre' => [[['_route' => 'enregistre', '_controller' => 'App\\Controller\\EntrepriseController::enregistrer'], null, ['POST' => 0], null, false, false, null]],
         '/api/list/entreprise' => [[['_route' => 'list_entreprise', '_controller' => 'App\\Controller\\EntrepriseController::liste'], null, ['GET' => 0], null, false, false, null]],
         '/api/list/utilisateur' => [[['_route' => 'list_utilisateur', '_controller' => 'App\\Controller\\EntrepriseController::lister'], null, ['GET' => 0], null, false, false, null]],
         '/api/utilisateur' => [[['_route' => 'utilisateur', '_controller' => 'App\\Controller\\EntrepriseController::ajouter'], null, ['POST' => 0], null, false, false, null]],
@@ -30,6 +31,7 @@ return [
             [['_route' => 'api_login_check'], null, null, null, false, false, null],
         ],
         '/api/envoi' => [[['_route' => 'tra', '_controller' => 'App\\Controller\\TransactionController::envoi'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
+        '/api/retrait' => [[['_route' => 'add_retrait', '_controller' => 'App\\Controller\\TransactionController::retrait'], null, ['POST' => 0, 'GET' => 1], null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'

@@ -13,16 +13,16 @@ class TransactionType extends AbstractType
     {
         $builder
             ->add('code')
-            ->add('montant')
+            ->add('montant')/* 
             ->add('comenvoi')
             ->add('comretrait')
             ->add('cometat')
-            ->add('comsys')
+            ->add('comsys') */
             ->add('frais')
-            ->add('type')
+            ->add('type')/* 
             ->add('expediteur')
             ->add('beneficiaire')
-            ->add('user')
+            ->add('user') */
         ;
     }
 

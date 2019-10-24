@@ -34,7 +34,7 @@ class Beneficiaire
     private $telben;
 
     /**
-     * @ORM\Column(type="bigint")
+     * @ORM\Column(type="bigint", nullable=true)
      */
     private $cni;
 
@@ -42,6 +42,11 @@ class Beneficiaire
      * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="beneficiaire")
      */
     private $transactions;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateRetrait;
 
     public function __construct()
     {
@@ -130,6 +135,18 @@ class Beneficiaire
                 $transaction->setBeneficiaire(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDateRetrait(): ?\DateTimeInterface
+    {
+        return $this->dateRetrait;
+    }
+
+    public function setDateRetrait(\DateTimeInterface $dateRetrait): self
+    {
+        $this->dateRetrait = $dateRetrait;
 
         return $this;
     }

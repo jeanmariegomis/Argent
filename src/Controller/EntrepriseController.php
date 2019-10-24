@@ -39,9 +39,9 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class EntrepriseController extends AbstractController
 {
-    /** 
-     * @Route("/register", name="entreprise", methods={"POST"})
-     */
+/**
+* @Route("/enregistre", name="enregistre", methods={"POST"})
+*/
     public function enregistrer(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder,ValidatorInterface $validator,SerializerInterface $serializer): Response
     {
         
@@ -73,11 +73,11 @@ class EntrepriseController extends AbstractController
         $Utilisateur->setTelephone(rand(770000000,779999999));
         $Utilisateur->setNci(strval(rand(150000000,979999999)));
         $Utilisateur->setStatus('Actif');
-        $Utilisateur->setRoles(['ROLE_AdminPrincipal']);
+        $Utilisateur->setRoles(['ROLE_Caissier']);
       
 
         $Entreprise= new Entreprise();
-        $form = $this->createForm(EntrepriseType::class, $Entreprise);// liaison de notre formulaire avec l'objet de type depot
+        $form = $this->createForm(EntrepriseType::class, $Entreprise);// liaison de notre formulaire avec l'objet de type entreprise
         $data=$request->request->all(); //conversion de notre element de la requette
         $form->submit($data);
         $Entreprise->setStatus('Actif');
@@ -92,6 +92,7 @@ class EntrepriseController extends AbstractController
 
         $Compte->setNumeroCompte($random);
         $Compte->setEntreprise($Entreprise);
+        $Utilisateur->setCompte($Compte);
         $entityManager = $this->getDoctrine()->getManager();
         
     
@@ -226,7 +227,7 @@ class EntrepriseController extends AbstractController
         $errors = $serializer->serialize($errors, 'json');
         return new Response($errors, 500, ['Content-Type' => 'Application/json']);
         }
-           $manager->persist($Compte);// nous permet d'ecrire dans la table entreprise
+           $manager->persist($Compte);// nous permet d'ecrire dans la table compte
            $manager->persist($depot);//permet d'ecrire dans la table depot
            $manager->flush();
            $data = [

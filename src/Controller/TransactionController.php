@@ -20,6 +20,8 @@ use App\Form\UtilisateurType;
 use App\Form\BeneficiaireType;
 use JMS\Serializer\SerializerBuilder;
 use App\Repository\EntrepriseRepository;
+use App\Repository\TransactionRepository;
+use App\Repository\BeneficiaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\UtilisateurRepository;
 use Symfony\Component\Form\FormTypeInterface;
@@ -47,40 +49,24 @@ class TransactionController extends AbstractController
     SerializerInterface $serializer, ValidatorInterface $validator):Response
     {
 
-        $envoi = new Transaction();
-        
-        $form = $this->createForm(TransactionType::class,$envoi);
-        $Utilisateur = $this->getUtilisateur;
-        $data = $request->request->all();
-        $form->submit($data);
-      
-        $expediteur = new Expediteur();
-        $form=$this->createForm(ExpediteurType::class , $expediteur);
+        $beneficiaire = new Beneficiaire();
+        $form=$this->createForm(BeneficiaireType::class , $beneficiaire);
         $data=$request->request->all();
          $form->submit($data);
+
+         $expediteur = new Expediteur();
+         $form=$this->createForm(ExpediteurType::class , $expediteur);
+         $data=$request->request->all();
+          $form->submit($data);
+
+        $envoi = new Transaction();
+        $form = $this->createForm(TransactionType::class,$envoi);
         
-         $envoi->setExpediteur($expediteur);
+        $user = $this->getUser();
+        $data = $request->request->all();
+        $form->submit($data); 
+
          
-
-         $beneficiaire = new Beneficiaire();
-         $form=$this->createForm(BeneficiaireType::class , $beneficiaire);
-         $data=$request->request->all();
-          $form->submit($data);
-
-          $envoi->setBeneficiaire($beneficiaire);
-
-
-          
-         $Utilisateur= new Utilisateur();
-         $form=$this->createForm(Utilisateur::class , $Utilisateur);
-         $data=$request->request->all();
-          $form->submit($data);
-
-          $envoi->setUtilisateur($Utilisateur);
-
-        
-
-
        
 
             $envoi->setDateenvoi(new \DateTime());
@@ -94,6 +80,9 @@ class TransactionController extends AbstractController
                 }
             }
             $envoi->setCode($alea);
+            $envoi->setExpediteur($expediteur);
+            $envoi->setBeneficiaire($beneficiaire);
+          
            
             $vo=$form->get('montant')->getData();
             $frais= $this->getDoctrine()->getRepository(Tarifs::class)->findAll();
@@ -115,13 +104,11 @@ class TransactionController extends AbstractController
              
             
 
-            $Compte=$Utilisateur->getCompte();
-            $envoi->setUtilisateur($Utilisateur);
-
-         
+            $Compte=$user->getCompte();
+            $envoi->setUtilisateur($user);         
             if($Compte->getSolde() > $envoi->getMontant() ){
                 $Montant= $Compte->getSolde()-$envoi->getMontant()+$envoi->getComenvoi();
-            
+                $envoi->setUtilisateur($user);
                 $Compte->setSolde($Montant);
             $entityManager->persist($Compte);
             $entityManager->persist($envoi);
@@ -139,5 +126,43 @@ class TransactionController extends AbstractController
 
         }
     
-  
+   /**
+     * @Route("/retrait", name="add_retrait" ,methods={"POST", "GET"})
+     */
+
+    public function retrait(Request $request, EntityManagerInterface $entityManager, TransactionRepository $transaction)
+    {
+
+        $trans = new Beneficiaire();
+        $form = $this->createForm(BeneficiaireType::class, $trans);
+        $user = $this->getUser();
+        $data = $request->request->all();
+        $form->submit($data); 
+        $code=$data['code'];
+
+        $trouve=$transaction->findOneBy(['code' =>$code]);
+        
+        if (!$trouve) {
+            return new Response('Le code saisi est incorecte .Veuillez ressayer un autre  ');
+        } 
+        
+        $statut=$trouve->getType();
+
+        if($trouve->getCode()== $code && $statut=="retrait"){
+            return new Response('Le code saisi est déjà retiré  ');
+
+        }
+
+        $trans->setCni($data["cni"]);
+
+        $trans->setDateRetrait(new \DateTime());
+
+        $trouve->setType("retrait");
+        $trouve->setUtilisateur($user);
+
+        $entityManager->flush();
+        
+        return new Response('Vous venez de retirer  ' . $trouve->getMontant());
+        
+    }
 }
